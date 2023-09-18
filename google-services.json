@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706015345182",
+    "project_id": "monopolia-68467",
+    "storage_bucket": "monopolia-68467.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706015345182:android:48841049134a3240440c0f",
+        "android_client_info": {
+          "package_name": "com.example.monopolia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706015345182-j9f3qrce6585oqkfghrs651hih9v64tc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQnccC5dFfWISGivIq61QBijUzkVxoZ8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706015345182-j9f3qrce6585oqkfghrs651hih9v64tc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
