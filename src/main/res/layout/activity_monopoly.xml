@@ -15,8 +15,6 @@
         android:orientation="horizontal">
 
 
-        <!-- Остальные контейнеры для изображений и текста здесь -->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -30,8 +28,6 @@
             android:layout_width="@dimen/cell_with_height"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <!-- Ваши контейнеры для изображений и текста здесь -->
 
         </LinearLayout>
 
@@ -50,8 +46,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!-- Ваши контейнеры для изображений и текста здесь -->
-
         </LinearLayout>
 
     </LinearLayout>
@@ -61,8 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/cell_with_height"
         android:orientation="horizontal">
-
-        <!-- Контейнеры для нижнего ряда здесь -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
