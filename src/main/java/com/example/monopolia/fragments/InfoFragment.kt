@@ -50,12 +50,7 @@ class InfoFragment : Fragment() {
 
 
         diceImage.setImageResource(drawableId as Int)
-//        val brandsAfterStart = listOf("startField", "adidas", "tax1", "nike", "question1", "audi", "vk", "question2", "telegram", "whatsapp", "bus", "pepsi", "mercedes", "nestle", "jail", "steam", "tax2", "epicGames", "gogcom", "ford", "alfabank", "sber", "question3", "vtb", "handcuffs", "nokia", "subaru", "apple")
-        val brands = gameManager.getBrandList()
-        // Вычисляем новую позицию с учетом текущей позиции и результата броска кубика
-        currentPosition = (currentPosition + diceResult) % gameManager.getBrandList().size
-        val brandToMoveTo = brands[currentPosition].name
-        moveGamePieceListener?.moveGamePieceToBrand(brandToMoveTo)
+
     }
 
 
