@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topRowContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cell_with_height"
+        android:layout_height="@dimen/horizontal_strip_height"
         android:orientation="horizontal">
 
 
@@ -25,7 +25,7 @@
 
         <LinearLayout
             android:id="@+id/leftColumnContainer"
-            android:layout_width="@dimen/cell_with_height"
+            android:layout_width="@dimen/vertical_column_width"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -42,7 +42,7 @@
 
         <LinearLayout
             android:id="@+id/rightColumnContainer"
-            android:layout_width="@dimen/cell_with_height"
+            android:layout_width="@dimen/vertical_column_width"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -53,7 +53,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomRowContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cell_with_height"
+        android:layout_height="@dimen/horizontal_strip_height"
         android:orientation="horizontal">
 
     </androidx.constraintlayout.widget.ConstraintLayout>

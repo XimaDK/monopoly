@@ -56,19 +56,18 @@ class GameFieldManager(private val context: Context, private val containerView: 
         val leftColumnCells = cellsList.subList(10, 13)
         addCellsToContainer(leftColumnContainer, leftColumnCells)
 
-        val rightColumnContainer = containerView.findViewById<LinearLayout>(R.id.rightColumnContainer)
+        val rightColumnContainer =
+            containerView.findViewById<LinearLayout>(R.id.rightColumnContainer)
         val rightColumnCells = cellsList.subList(13, 23)
         addCellsToContainer(rightColumnContainer, rightColumnCells)
 
-        val bottomRowContainer = containerView.findViewById<ConstraintLayout>(R.id.bottomRowContainer)
+        val bottomRowContainer =
+            containerView.findViewById<ConstraintLayout>(R.id.bottomRowContainer)
         val bottomRowCells = cellsList.subList(24, cellsList.size)
         addCellsToContainer(bottomRowContainer, bottomRowCells)
     }
 
     private fun addCellsToContainer(container: ViewGroup, cellList: List<Cell>) {
-        val context = container.context
-        val constraintSet = ConstraintSet()
-
         var prevCellView: View? = null
 
         for (cell in cellList) {
@@ -77,29 +76,30 @@ class GameFieldManager(private val context: Context, private val containerView: 
             cellView.setCellText(cell.price)
 
             val uniqueId = View.generateViewId()
-            cellView.id = uniqueId
+            cellView.getView().id = uniqueId
 
             val layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            container.addView(cellView, layoutParams)
+            container.addView(cellView.getView(), layoutParams)
 
             if (container is ConstraintLayout) {
+                val constraintSet = ConstraintSet()
                 constraintSet.clone(container)
 
                 if (prevCellView != null) {
                     constraintSet.connect(
-                        cellView.id,
+                        cellView.getView().id,
                         ConstraintSet.START,
                         prevCellView.id,
                         ConstraintSet.END
                     )
-                    constraintSet.setHorizontalBias(cellView.id, 0.5f)
+
                 } else {
                     constraintSet.connect(
-                        cellView.id,
+                        cellView.getView().id,
                         ConstraintSet.START,
                         ConstraintSet.PARENT_ID,
                         ConstraintSet.START
@@ -113,12 +113,11 @@ class GameFieldManager(private val context: Context, private val containerView: 
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
-                    linearLayoutParams.marginStart = 10
-                    cellView.layoutParams = linearLayoutParams
+                    cellView.getView().layoutParams = linearLayoutParams
                 }
             }
 
-            prevCellView = cellView
+            prevCellView = cellView.getView()
         }
     }
 }

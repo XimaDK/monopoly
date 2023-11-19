@@ -45,7 +45,7 @@ class InfoFragment : Fragment() {
             4 -> R.drawable.dice4
             5 -> R.drawable.dice5
             6 -> R.drawable.dice6
-            else -> null // В случае ошибки.
+            else -> null
         }
 
 

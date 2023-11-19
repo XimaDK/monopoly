@@ -1,42 +1,33 @@
 package com.example.monopolia.gameplay
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-
+import com.example.monopolia.R
 
 
 data class Cell(val name : String, val imageResId: Int, val price: String)
 
-class CellView(context: Context) : FrameLayout(context) {
-    private var imageView: ImageView? = null
-    private var textView: TextView? = null
+class CellView(context: Context) {
 
-    init {
-        init(context)
-    }
+    private val rootView: View = LayoutInflater.from(context).inflate(R.layout.cell_view, null)
+    private val imageView: ImageView = rootView.findViewById(R.id.cell_image)
+    private val textView: TextView = rootView.findViewById(R.id.cell_text)
 
-    private fun init(context: Context) {
-        LayoutInflater.from(context).inflate(com.example.monopolia.R.layout.cell_view, this, true)
-        imageView = findViewById(com.example.monopolia.R.id.cell_image)
-        textView = findViewById(com.example.monopolia.R.id.cell_text)
-    }
 
     fun setCellImage(resourceId: Int) {
-        imageView!!.setImageResource(resourceId)
+        imageView.setImageResource(resourceId)
     }
 
     fun setCellText(text: String?) {
-        textView!!.text = text
+        textView.text = text
     }
 
-    fun addChip(chipImageResource: Int) {
-        // Логика добавления фишки
-    }
-
-    fun removeChip() {
-        // Логика удаления фишки
+    fun getView(): View {
+        return rootView
     }
 }

@@ -22,10 +22,9 @@ class MonopolyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_monopoly)
-        val containerView = findViewById<ViewGroup>(R.id.gameFieldContainer) // Замените на ваш ID
+        val containerView = findViewById<ViewGroup>(R.id.gameFieldContainer) //
         gameFieldManager = GameFieldManager(this, containerView)
 
-        // Вызываем метод для создания и размещения ячеек
         gameFieldManager.populateField()
     }
 }
