@@ -7,9 +7,27 @@
 
     <ImageView
         android:id="@+id/cell_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/adidas" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/game_piece_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        >
+
+
+        <ImageView
+            android:id="@+id/game_piece1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/chip"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/cell_text"
@@ -18,4 +36,5 @@
         android:text="100$"
         android:layout_gravity="bottom|center_horizontal"
         android:paddingBottom="8dp" />
+
 </FrameLayout>

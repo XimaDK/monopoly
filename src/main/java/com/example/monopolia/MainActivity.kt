@@ -3,12 +3,10 @@ package com.example.monopolia
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Nickname
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.view.isVisible
+import com.example.monopolia.connection.ServerService
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         btnForNewGame.setOnClickListener {
             val monopolyActivity = Intent(this, MonopolyActivity::class.java)
             monopolyActivity.putExtra("nickname", nickname.text)
+
+            startService(Intent(this, ServerService::class.java))
             startActivity(monopolyActivity)
         }
 

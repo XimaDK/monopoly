@@ -8,14 +8,14 @@
     android:id="@+id/gameFieldContainer"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:id="@+id/topRowContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/horizontal_strip_height"
+        android:layout_height="@dimen/vertical_column_width"
         android:orientation="horizontal">
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,12 +50,12 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/bottomRowContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/horizontal_strip_height"
+        android:layout_height="@dimen/vertical_column_width"
         android:orientation="horizontal">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </LinearLayout>

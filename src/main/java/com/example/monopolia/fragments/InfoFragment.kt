@@ -8,16 +8,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import com.example.monopolia.R
-import com.example.monopolia.gameplay.Cell
-import com.example.monopolia.gameplay.MonopolyGameManager
-import com.example.monopolia.interfaces.MoveGamePieceListener
+import com.example.monopolia.gameplay.GameFieldManager
+import com.example.monopolia.gameplay.MonopolyManager
 
 class InfoFragment : Fragment() {
 
-    private lateinit var btnRoll : Button
-    private lateinit var diceImage : ImageView
-    private var moveGamePieceListener: MoveGamePieceListener? = null
-    private var currentPosition: Int = 0
+    private lateinit var btnRoll: Button
+    private var diceResult = 0
+    private lateinit var diceImage: ImageView
+    private lateinit var gameFieldManager: GameFieldManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,15 +28,15 @@ class InfoFragment : Fragment() {
         diceImage = view.findViewById(R.id.diceImage)
 
         btnRoll.setOnClickListener {
-            moveGamePiece()
+            printRollDice()
+            gameFieldManager.moveChip(diceResult)
         }
 
         return view
     }
 
-    private fun moveGamePiece() {
-        val gameManager = MonopolyGameManager()
-        val diceResult = gameManager.rollDice()
+    private fun printRollDice() {
+        diceResult = MonopolyManager.rollDice()
         val drawableId = when (diceResult) {
             1 -> R.drawable.dice1
             2 -> R.drawable.dice2
@@ -48,14 +47,10 @@ class InfoFragment : Fragment() {
             else -> null
         }
 
-
         diceImage.setImageResource(drawableId as Int)
-
     }
 
-
-    fun setMoveGamePieceListener(listener: MoveGamePieceListener) {
-        this.moveGamePieceListener = listener
+    fun setGameFieldManager(manager: GameFieldManager) {
+        gameFieldManager = manager
     }
-
 }

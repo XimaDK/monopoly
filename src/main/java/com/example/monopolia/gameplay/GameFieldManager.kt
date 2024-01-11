@@ -1,19 +1,21 @@
 package com.example.monopolia.gameplay
 
 import android.content.Context
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import com.example.monopolia.R
-import com.example.monopolia.interfaces.MoveGamePieceListener
 
 class GameFieldManager(private val context: Context, private val containerView: ViewGroup) {
 
     private val cellsList: List<Cell> = createCellList()
+    private lateinit var topRowContainer : LinearLayout
+    private lateinit var leftColumnContainer : LinearLayout
+    private lateinit var rightColumnContainer : LinearLayout
+    private lateinit var bottomRowContainer : LinearLayout
+    private val cellViewsList: MutableList<CellView> = mutableListOf()
+
+
+    private var currentChipPosition = 0
 
     private fun createCellList(): List<Cell> {
         return listOf(
@@ -24,6 +26,7 @@ class GameFieldManager(private val context: Context, private val containerView: 
             Cell("question1", R.drawable.question1, ""),
             Cell("audi", R.drawable.audi, "1000"),
             Cell("vk", R.drawable.vk, "400"),
+            Cell("question2", R.drawable.question2, ""),
             Cell("telegram", R.drawable.telegram, "500"),
             Cell("whatsApp", R.drawable.whatsapp, "600"),
             Cell("bus", R.drawable.bus, ""),
@@ -38,9 +41,9 @@ class GameFieldManager(private val context: Context, private val containerView: 
             Cell("ford", R.drawable.ford, "1000"),
             Cell("alfabank", R.drawable.alfabank, "1200"),
             Cell("sber", R.drawable.sber, "1300"),
-            Cell("question2", R.drawable.question2, ""),
+            Cell("question3", R.drawable.question1, ""),
             Cell("vtb", R.drawable.vtb, "1400"),
-            Cell("handcuffs", R.drawable.handcuffs, "handcuffs"),
+            Cell("handcuffs", R.drawable.handcuffs, ""),
             Cell("nokia", R.drawable.nokia, "1500"),
             Cell("subaru", R.drawable.subaru, "1000"),
             Cell("apple", R.drawable.apple, "1600")
@@ -48,76 +51,77 @@ class GameFieldManager(private val context: Context, private val containerView: 
     }
 
     fun populateField() {
-        val topRowContainer = containerView.findViewById<ConstraintLayout>(R.id.topRowContainer)
-        val topRowCells = cellsList.subList(0, 10)
-        addCellsToContainer(topRowContainer, topRowCells)
 
-        val leftColumnContainer = containerView.findViewById<LinearLayout>(R.id.leftColumnContainer)
-        val leftColumnCells = cellsList.subList(10, 13)
-        addCellsToContainer(leftColumnContainer, leftColumnCells)
+        topRowContainer = containerView.findViewById(R.id.topRowContainer)
+        val topRowCells = cellsList.subList(0, 11)
+        addCellsToContainer(topRowContainer, topRowCells,  1)
 
-        val rightColumnContainer =
-            containerView.findViewById<LinearLayout>(R.id.rightColumnContainer)
-        val rightColumnCells = cellsList.subList(13, 23)
-        addCellsToContainer(rightColumnContainer, rightColumnCells)
+        rightColumnContainer =
+            containerView.findViewById(R.id.rightColumnContainer)
+        val rightColumnCells = cellsList.subList(11, 14)
+        addCellsToContainer(rightColumnContainer, rightColumnCells, 4)
 
-        val bottomRowContainer =
-            containerView.findViewById<ConstraintLayout>(R.id.bottomRowContainer)
-        val bottomRowCells = cellsList.subList(24, cellsList.size)
-        addCellsToContainer(bottomRowContainer, bottomRowCells)
+        bottomRowContainer =
+            containerView.findViewById(R.id.bottomRowContainer)
+        val bottomRowCells = cellsList.subList(14, 25).reversed()
+        addCellsToContainer(bottomRowContainer, bottomRowCells,  3)
+
+        leftColumnContainer = containerView.findViewById(R.id.leftColumnContainer)
+        val leftColumnCells = cellsList.subList(25, cellsList.size).reversed()
+        addCellsToContainer(leftColumnContainer, leftColumnCells, 2)
     }
 
-    private fun addCellsToContainer(container: ViewGroup, cellList: List<Cell>) {
-        var prevCellView: View? = null
-
-        for (cell in cellList) {
+    private fun addCellsToContainer(
+        container: ViewGroup,
+        cellList: List<Cell>,
+        direction: Int,
+    ) {
+        cellList.forEachIndexed { index, cell ->
             val cellView = CellView(context)
             cellView.setCellImage(cell.imageResId)
             cellView.setCellText(cell.price)
+            cellView.setDirection(direction)
 
-            val uniqueId = View.generateViewId()
-            cellView.getView().id = uniqueId
-
-            val layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
-            container.addView(cellView.getView(), layoutParams)
-
-            if (container is ConstraintLayout) {
-                val constraintSet = ConstraintSet()
-                constraintSet.clone(container)
-
-                if (prevCellView != null) {
-                    constraintSet.connect(
-                        cellView.getView().id,
-                        ConstraintSet.START,
-                        prevCellView.id,
-                        ConstraintSet.END
+            val layoutParams: LinearLayout.LayoutParams =
+                if ((direction == 1 || direction == 3) && (index == 0 || index == cellList.lastIndex)) {
+                    LinearLayout.LayoutParams(
+                        context.resources.getDimension(R.dimen.vertical_column_width).toInt(),
+                        context.resources.getDimension(R.dimen.horizontal_strip_height).toInt(),
                     )
-
+                } else if ((direction == 1 || direction == 3)) {
+                    LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                    ).apply {
+                        weight = 1f
+                    }
                 } else {
-                    constraintSet.connect(
-                        cellView.getView().id,
-                        ConstraintSet.START,
-                        ConstraintSet.PARENT_ID,
-                        ConstraintSet.START
-                    )
+                    LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        0,
+                    ).apply {
+                        weight = 1f
+                    }
                 }
-
-                constraintSet.applyTo(container)
-            } else if (container is LinearLayout) {
-                if (prevCellView != null) {
-                    val linearLayoutParams = LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                    cellView.getView().layoutParams = linearLayoutParams
-                }
-            }
-
-            prevCellView = cellView.getView()
+            container.addView(cellView.getView(), layoutParams)
+            cellViewsList.add(cellView)
         }
     }
+
+    fun moveChip(diceResult: Int) {
+        hideChipAtPosition(currentChipPosition)
+
+        currentChipPosition = (currentChipPosition + (diceResult)) % cellsList.size
+
+        showChipAtPosition(currentChipPosition)
+    }
+
+    private fun hideChipAtPosition(position: Int) {
+        cellViewsList.getOrNull(position)?.setChipVisible(false)
+    }
+
+    private fun showChipAtPosition(position: Int) {
+        cellViewsList.getOrNull(position)?.setChipVisible(true)
+    }
+
 }
