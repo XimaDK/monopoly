@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             val monopolyActivity = Intent(this, MonopolyActivity::class.java)
             monopolyActivity.putExtra("nickname", nickname.text)
 
-            startService(Intent(this, ServerService::class.java))
+//            startService(Intent(this, ServerService::class.java))
             startActivity(monopolyActivity)
         }
 

@@ -14,8 +14,10 @@ class MonopolyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_monopoly)
         val containerView = findViewById<ViewGroup>(R.id.gameFieldContainer) //
-        gameFieldManager = GameFieldManager(this, containerView)
+        gameFieldManager = GameFieldManager(this, containerView, 2)
         gameFieldManager.populateField()
+        gameFieldManager.initPlayers()
+
 
 
         val fragmentManager = supportFragmentManager

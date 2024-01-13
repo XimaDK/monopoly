@@ -1,5 +1,6 @@
 package com.example.monopolia.fragments
 
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import com.example.monopolia.R
+import com.example.monopolia.gameplay.Cell
 import com.example.monopolia.gameplay.GameFieldManager
 import com.example.monopolia.gameplay.MonopolyManager
 
@@ -30,7 +32,10 @@ class InfoFragment : Fragment() {
         btnRoll.setOnClickListener {
             printRollDice()
             gameFieldManager.moveChip(diceResult)
+            gameFieldManager.switchPlayer()
         }
+
+
 
         return view
     }
@@ -52,5 +57,9 @@ class InfoFragment : Fragment() {
 
     fun setGameFieldManager(manager: GameFieldManager) {
         gameFieldManager = manager
+    }
+
+    fun buyBrand(cell : Cell){
+
     }
 }

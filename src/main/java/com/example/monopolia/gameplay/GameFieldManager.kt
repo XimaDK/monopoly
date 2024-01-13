@@ -5,17 +5,26 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.monopolia.R
 
-class GameFieldManager(private val context: Context, private val containerView: ViewGroup) {
+class GameFieldManager(private val context: Context, private val containerView: ViewGroup,
+                       private val numPlayers: Int) {
 
     private val cellsList: List<Cell> = createCellList()
-    private lateinit var topRowContainer : LinearLayout
-    private lateinit var leftColumnContainer : LinearLayout
-    private lateinit var rightColumnContainer : LinearLayout
-    private lateinit var bottomRowContainer : LinearLayout
+    private lateinit var topRowContainer: LinearLayout
+    private lateinit var leftColumnContainer: LinearLayout
+    private lateinit var rightColumnContainer: LinearLayout
+    private lateinit var bottomRowContainer: LinearLayout
     private val cellViewsList: MutableList<CellView> = mutableListOf()
+    private var flag: Boolean = false
+    private var currentChipPositions = MutableList(numPlayers) { 0 }
+    private var currentPlayerIndex = 0
 
 
-    private var currentChipPosition = 0
+    fun initPlayers() {
+        for (i in 0 until numPlayers) {
+            currentChipPositions[i] = 0
+            showChipAtPosition(currentChipPositions[i], i)
+        }
+    }
 
     private fun createCellList(): List<Cell> {
         return listOf(
@@ -54,7 +63,7 @@ class GameFieldManager(private val context: Context, private val containerView: 
 
         topRowContainer = containerView.findViewById(R.id.topRowContainer)
         val topRowCells = cellsList.subList(0, 11)
-        addCellsToContainer(topRowContainer, topRowCells,  1)
+        addCellsToContainer(topRowContainer, topRowCells, 1)
 
         rightColumnContainer =
             containerView.findViewById(R.id.rightColumnContainer)
@@ -63,11 +72,11 @@ class GameFieldManager(private val context: Context, private val containerView: 
 
         bottomRowContainer =
             containerView.findViewById(R.id.bottomRowContainer)
-        val bottomRowCells = cellsList.subList(14, 25).reversed()
-        addCellsToContainer(bottomRowContainer, bottomRowCells,  3)
+        val bottomRowCells = cellsList.subList(14, 25)
+        addCellsToContainer(bottomRowContainer, bottomRowCells, 3)
 
         leftColumnContainer = containerView.findViewById(R.id.leftColumnContainer)
-        val leftColumnCells = cellsList.subList(25, cellsList.size).reversed()
+        val leftColumnCells = cellsList.subList(25, cellsList.size)
         addCellsToContainer(leftColumnContainer, leftColumnCells, 2)
     }
 
@@ -94,6 +103,7 @@ class GameFieldManager(private val context: Context, private val containerView: 
                         LinearLayout.LayoutParams.MATCH_PARENT,
                     ).apply {
                         weight = 1f
+                        if (direction == 3) flag = true
                     }
                 } else {
                     LinearLayout.LayoutParams(
@@ -103,25 +113,32 @@ class GameFieldManager(private val context: Context, private val containerView: 
                         weight = 1f
                     }
                 }
-            container.addView(cellView.getView(), layoutParams)
+            if (flag) {
+                container.addView(cellView.getView(), 0, layoutParams)
+            } else {
+                container.addView(cellView.getView(), layoutParams)
+            }
             cellViewsList.add(cellView)
         }
     }
 
     fun moveChip(diceResult: Int) {
-        hideChipAtPosition(currentChipPosition)
-
-        currentChipPosition = (currentChipPosition + (diceResult)) % cellsList.size
-
-        showChipAtPosition(currentChipPosition)
+        hideChipAtPosition(currentChipPositions[currentPlayerIndex], currentPlayerIndex)
+        currentChipPositions[currentPlayerIndex] =
+            (currentChipPositions[currentPlayerIndex] + diceResult) % cellsList.size
+        showChipAtPosition(currentChipPositions[currentPlayerIndex], currentPlayerIndex)
     }
 
-    private fun hideChipAtPosition(position: Int) {
-        cellViewsList.getOrNull(position)?.setChipVisible(false)
+    fun switchPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers
     }
 
-    private fun showChipAtPosition(position: Int) {
-        cellViewsList.getOrNull(position)?.setChipVisible(true)
+    private fun hideChipAtPosition(position: Int, playerIndex: Int) {
+        cellViewsList.getOrNull(position)?.setChipVisible(false, playerIndex, context)
+    }
+
+    private fun showChipAtPosition(position: Int, playerIndex: Int) {
+        cellViewsList.getOrNull(position)?.setChipVisible(true, playerIndex, context)
     }
 
 }

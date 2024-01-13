@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="player1_color">#800000</color>
+    <color name="player2_color">#000080</color>
+    <color name="player3_color">#c0c0c0</color>
+    <color name="default_player_color">#00FF00</color>
 </resources>
