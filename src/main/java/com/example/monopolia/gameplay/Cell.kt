@@ -52,7 +52,7 @@ class CellView(context: Context) {
     fun setChipVisible(visible: Boolean, playerIndex: Int, context: Context) {
 
         val chipImageView = ImageView(context)
-        chipImageView.setImageResource(R.drawable.chip) // Use your chip image resource
+        chipImageView.setImageResource(R.drawable.chip)
         chipImageView.setColorFilter(getPlayerColor(playerIndex, context))
 
         if (visible) {
