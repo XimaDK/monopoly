@@ -11,22 +11,22 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/game_piece_container"
+        android:id="@+id/chipStackLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        >
+        android:layout_gravity="center">
 
 
         <ImageView
             android:id="@+id/game_piece1"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:src="@drawable/chip"
             android:layout_gravity="center"
             android:visibility="gone"
             />
+
     </LinearLayout>
 
     <TextView
