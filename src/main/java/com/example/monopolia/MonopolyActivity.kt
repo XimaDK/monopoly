@@ -13,16 +13,15 @@ class MonopolyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_monopoly)
-        val containerView = findViewById<ViewGroup>(R.id.gameFieldContainer) //
-        gameFieldManager = GameFieldManager(this, containerView, 2)
-        gameFieldManager.populateField()
-        gameFieldManager.initPlayers()
-
-
+        val containerView = findViewById<ViewGroup>(R.id.gameFieldContainer)
 
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         val infoFragment = InfoFragment()
+
+        gameFieldManager = GameFieldManager(this, containerView, 2)
+        gameFieldManager.populateField()
+        gameFieldManager.initPlayers()
 
         infoFragment.setGameFieldManager(gameFieldManager)
 

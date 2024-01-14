@@ -26,6 +26,28 @@ class GameFieldManager(private val context: Context, private val containerView: 
         }
     }
 
+    fun updateCellBackgroundColor(playerIndex: Int, cellView: CellView) {
+        cellView.updateCellBackgroundColor(cellView.getPlayerColor(playerIndex, context))
+    }
+
+    fun getCellView(cell: Cell): CellView? {
+        val cellIndex = cellsList.indexOf(cell)
+        return if (cellIndex != -1) {
+            cellViewsList.getOrNull(cellIndex)
+        } else {
+            null
+        }
+    }
+
+    fun getCurrentCell(): Cell? {
+        val currentPlayerPosition = currentChipPositions[currentPlayerIndex]
+        return cellsList.getOrNull(currentPlayerPosition)
+    }
+
+    fun getCurrentPlayerIndex() : Int {
+        return currentPlayerIndex
+    }
+
     private fun createCellList(): List<Cell> {
         return listOf(
             Cell("startfield", R.drawable.startfield, ""),

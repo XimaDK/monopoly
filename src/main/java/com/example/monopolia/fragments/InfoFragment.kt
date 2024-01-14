@@ -16,6 +16,7 @@ import com.example.monopolia.gameplay.MonopolyManager
 class InfoFragment : Fragment() {
 
     private lateinit var btnRoll: Button
+    private lateinit var btnBuy: Button
     private var diceResult = 0
     private lateinit var diceImage: ImageView
     private lateinit var gameFieldManager: GameFieldManager
@@ -26,6 +27,7 @@ class InfoFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
+        btnBuy = view.findViewById(R.id.buy)
         btnRoll = view.findViewById(R.id.roll)
         diceImage = view.findViewById(R.id.diceImage)
 
@@ -34,6 +36,14 @@ class InfoFragment : Fragment() {
             gameFieldManager.moveChip(diceResult)
             gameFieldManager.switchPlayer()
         }
+
+        btnBuy.setOnClickListener {
+            val currentCell = gameFieldManager.getCurrentCell()
+            currentCell?.let {
+                buyBrand(it)
+            }
+        }
+
 
 
 
@@ -59,7 +69,12 @@ class InfoFragment : Fragment() {
         gameFieldManager = manager
     }
 
-    fun buyBrand(cell : Cell){
+    private fun buyBrand(cell: Cell) {
+        val playerIndex = gameFieldManager.getCurrentPlayerIndex()
+        val cellView = gameFieldManager.getCellView(cell)
 
+        if (cellView != null) {
+            gameFieldManager.updateCellBackgroundColor(playerIndex, cellView)
+        }
     }
 }
