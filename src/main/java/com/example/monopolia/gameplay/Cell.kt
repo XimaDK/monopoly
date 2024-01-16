@@ -24,6 +24,8 @@ class CellView(context: Context) {
     private val imageView: ImageView = rootView.findViewById(R.id.cell_image)
     private val textView: TextView = rootView.findViewById(R.id.cell_text)
     private val chipStackLayout: LinearLayout = rootView.findViewById(R.id.chipStackLayout)
+    private val playerChipMap = HashMap<Int, ImageView>()
+
 
 
     fun setDirection(direction: Int) {
@@ -53,38 +55,40 @@ class CellView(context: Context) {
         return rootView
     }
 
-fun setChipVisible(visible: Boolean, playerIndex: Int, context: Context) {
-    val chipImageView = ImageView(context)
-    chipImageView.layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    chipImageView.setImageResource(R.drawable.chip)
 
-    val shapeDrawable = ContextCompat.getDrawable(context, R.drawable.chip) as GradientDrawable
 
-    shapeDrawable.setColor(getPlayerColor(playerIndex, context))
+    fun setChipVisible(visible: Boolean, playerIndex: Int, context: Context) {
+        if (visible) {
+            if (!playerChipMap.containsKey(playerIndex)) {
+                val chipImageView = createChipImageView(context, playerIndex)
+                chipStackLayout.addView(chipImageView)
+                playerChipMap[playerIndex] = chipImageView
+            }
+        } else {
+            playerChipMap[playerIndex]?.let {
+                chipStackLayout.removeView(it)
+                playerChipMap.remove(playerIndex)
+            }
+        }
+    }
 
-    shapeDrawable.setStroke(8, ContextCompat.getColor(context, android.R.color.black))
-
-    chipImageView.background = shapeDrawable
-
-    val chipContainer = rootView.findViewById<LinearLayout>(R.id.chipStackLayout)
-
-    if (visible) {
-        val frameLayout = FrameLayout(context)
-        frameLayout.layoutParams = ViewGroup.LayoutParams(
+    private fun createChipImageView(context: Context, playerIndex: Int): ImageView {
+        val chipImageView = ImageView(context)
+        chipImageView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        frameLayout.addView(chipImageView)
+        chipImageView.setImageResource(R.drawable.chip)
 
-        chipContainer.addView(frameLayout)
-        chipContainer.gravity = Gravity.CENTER
-    } else {
-        chipContainer.removeAllViews()
+        val shapeDrawable = ContextCompat.getDrawable(context, R.drawable.chip) as GradientDrawable
+        shapeDrawable.setColor(getPlayerColor(playerIndex, context))
+        shapeDrawable.setStroke(8, ContextCompat.getColor(context, android.R.color.black))
+
+        chipImageView.setImageDrawable(shapeDrawable)
+
+        return chipImageView
     }
-}
+
 
 
     fun getPlayerColor(playerIndex: Int, context: Context): Int {

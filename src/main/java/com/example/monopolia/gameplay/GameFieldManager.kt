@@ -3,6 +3,7 @@ package com.example.monopolia.gameplay
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.monopolia.R
 
 class GameFieldManager(private val context: Context, private val containerView: ViewGroup,
@@ -17,13 +18,20 @@ class GameFieldManager(private val context: Context, private val containerView: 
     private var flag: Boolean = false
     private var currentChipPositions = MutableList(numPlayers) { 0 }
     private var currentPlayerIndex = 0
+    private val players: MutableList<Player> = mutableListOf()
+
 
 
     fun initPlayers() {
         for (i in 0 until numPlayers) {
             currentChipPositions[i] = 0
             showChipAtPosition(currentChipPositions[i], i)
+            players.add(Player(i))
         }
+    }
+
+    fun getPlayer(index: Int) : Player{
+        return players[index]
     }
 
     fun updateCellBackgroundColor(playerIndex: Int, cellView: CellView) {
@@ -162,5 +170,6 @@ class GameFieldManager(private val context: Context, private val containerView: 
     private fun showChipAtPosition(position: Int, playerIndex: Int) {
         cellViewsList.getOrNull(position)?.setChipVisible(true, playerIndex, context)
     }
+
 
 }
