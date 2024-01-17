@@ -15,13 +15,30 @@ class Player(val id : Int) {
     fun purchaseBrand(brand: Cell): Boolean {
         val brandPrice = brand.price.toIntOrNull()
 
-        if (brandPrice != null && balance >= brandPrice) {
+        if (brand.getCurrentOwner() == -1 && brandPrice != null && balance >= brandPrice) {
             balance -= brandPrice
             purchasedBrands.add(brand)
+            brand.owners.add(id)
             return true
         }
 
         return false
+    }
+
+    fun pay(receiver: Player, amount: Int) {
+        if (balance >= amount) {
+            balance -= amount
+            receiver.receivePayment(amount)
+        } else {
+
+        }
+    }
+
+    fun payTax(amount: Int) {
+        balance -= amount
+    }
+    private fun receivePayment(amount: Int) {
+        balance += amount
     }
 
 }

@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.monopolia.R
 import com.example.monopolia.gameplay.Cell
+import com.example.monopolia.gameplay.EventFieldHandler
 import com.example.monopolia.gameplay.GameFieldManager
 import com.example.monopolia.gameplay.MonopolyManager
 import com.example.monopolia.gameplay.Player
@@ -27,6 +28,9 @@ class InfoFragment : Fragment() {
     private lateinit var diceImage: ImageView
     private lateinit var gameFieldManager: GameFieldManager
     private lateinit var showBalanceText : TextView
+    private lateinit var payButton: Button
+    private lateinit var eventFieldHandler : EventFieldHandler
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +43,16 @@ class InfoFragment : Fragment() {
         diceImage = view.findViewById(R.id.diceImage)
         btnSwitchPlayer = view.findViewById(R.id.switchPlayer)
         showBalanceText = view.findViewById(R.id.infoBalance)
+        payButton = view.findViewById(R.id.payButton)
+        eventFieldHandler = EventFieldHandler(requireContext())
+
 
         btnRoll.setOnClickListener {
             printRollDice()
             gameFieldManager.moveChip(diceResult)
             btnSwitchPlayer.visibility = View.VISIBLE
-            btnRoll.isEnabled = false // Делаем кнопку неактивной
+            btnRoll.isEnabled = false
+            checkAndShowPayButton()
         }
 
         btnBuy.setOnClickListener {
@@ -62,6 +70,38 @@ class InfoFragment : Fragment() {
 
 
         return view
+    }
+
+    private fun checkAndShowPayButton() {
+        val currentCell = gameFieldManager.getCurrentCell()
+        val currentOwner = currentCell?.getCurrentOwner()
+
+        if (currentOwner != -1 && currentOwner != gameFieldManager.getCurrentPlayerIndex()) {
+            payButton.visibility = View.VISIBLE
+
+            payButton.setOnClickListener {
+                handlePayButtonClick()
+            }
+        } else {
+            payButton.visibility = View.GONE
+        }
+    }
+
+    private fun handlePayButtonClick() {
+        val currentCell = gameFieldManager.getCurrentCell()
+        val currentPlayer = gameFieldManager.getPlayer(gameFieldManager.getCurrentPlayerIndex())
+        val ownerPlayer = gameFieldManager.getPlayer(currentCell?.getCurrentOwner() ?: -1)
+        val priceToPay = currentCell?.price?.toDoubleOrNull() ?: 0.0
+
+        if (currentPlayer.getBalance() >= priceToPay) {
+            currentPlayer.pay(ownerPlayer, priceToPay.toInt()/2)
+            //потом убрать
+            Toast.makeText(requireContext(), "чек", Toast.LENGTH_SHORT).show()
+
+            payButton.visibility = View.GONE
+        } else {
+            Toast.makeText(requireContext(), "Недостаточно средств для оплаты.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun printRollDice() {
@@ -88,19 +128,16 @@ class InfoFragment : Fragment() {
         val cellView = gameFieldManager.getCellView(cell)
         val currentPlayer = gameFieldManager.getPlayer(playerIndex)
 
-
-        if(currentPlayer.purchaseBrand(cell)){
+        if (cell.getCurrentOwner() == -1 && currentPlayer.purchaseBrand(cell)) {
+            cell.owners.add(playerIndex)
             if (cellView != null) {
                 gameFieldManager.updateCellBackgroundColor(playerIndex, cellView)
                 getBalance(currentPlayer)
             }
+        } else {
+            Toast.makeText(requireContext(), "Этот бренд нельзя купить", Toast.LENGTH_SHORT).show()
 
         }
-        //ПОТОМ ПОМЕНЯЮ НА ЧТО НИБУДЬ НОРМАЛЬНОЕ
-        else{
-            Log.d("d", "wdwddd")
-        }
-
     }
 
     private fun getBalance(player: Player) {

@@ -19,8 +19,7 @@ class GameFieldManager(private val context: Context, private val containerView: 
     private var currentChipPositions = MutableList(numPlayers) { 0 }
     private var currentPlayerIndex = 0
     private val players: MutableList<Player> = mutableListOf()
-
-
+    private val eventFieldHandler = EventFieldHandler(context)
 
     fun initPlayers() {
         for (i in 0 until numPlayers) {
@@ -56,11 +55,18 @@ class GameFieldManager(private val context: Context, private val containerView: 
         return currentPlayerIndex
     }
 
+    private fun handleEventField(playerIndex: Int) {
+        val currentCell = cellsList[currentChipPositions[playerIndex]]
+        if (currentCell.eventType != null) {
+            eventFieldHandler.handleEvent(currentCell, players[playerIndex])
+        }
+    }
+
     private fun createCellList(): List<Cell> {
         return listOf(
             Cell("startfield", R.drawable.startfield, ""),
-            Cell("adidas", R.drawable.adidas, "$100"),
-            Cell("tax1", R.drawable.tax1, ""),
+            Cell("adidas", R.drawable.adidas, "100"),
+            Cell("tax1", R.drawable.tax1, "", eventType = EventType.TAX),
             Cell("nike", R.drawable.nike, "200"),
             Cell("question1", R.drawable.question1, ""),
             Cell("audi", R.drawable.audi, "1000"),
@@ -74,7 +80,7 @@ class GameFieldManager(private val context: Context, private val containerView: 
             Cell("nestle", R.drawable.nestle, "800"),
             Cell("jail", R.drawable.jail, ""),
             Cell("steam", R.drawable.steam, "900"),
-            Cell("tax2", R.drawable.tax2, ""),
+            Cell("tax2", R.drawable.tax2, "", eventType = EventType.TAX),
             Cell("epicgames", R.drawable.epicgames, "1000"),
             Cell("gogcom", R.drawable.gogcom, "1100"),
             Cell("ford", R.drawable.ford, "1000"),
@@ -157,6 +163,9 @@ class GameFieldManager(private val context: Context, private val containerView: 
         currentChipPositions[currentPlayerIndex] =
             (currentChipPositions[currentPlayerIndex] + diceResult) % cellsList.size
         showChipAtPosition(currentChipPositions[currentPlayerIndex], currentPlayerIndex)
+
+        handleEventField(currentPlayerIndex)
+
     }
 
     fun switchPlayer() {

@@ -14,9 +14,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.monopolia.R
+import com.google.firebase.database.core.view.Event
 
 
-data class Cell(val name: String, val imageResId: Int, val price: String)
+data class Cell(val name: String, val imageResId: Int, val price: String,
+                var owners: MutableList<Int> = mutableListOf(), val eventType : EventType? = null) {
+    fun getCurrentOwner(): Int {
+        return owners.lastOrNull() ?: -1
+    }
+}
+
+enum class EventType {
+    TAX,
+    QUESTION,
+    JAIL
+}
 
 class CellView(context: Context) {
 
@@ -102,7 +114,11 @@ class CellView(context: Context) {
 
     fun updateCellBackgroundColor(color: Int) {
         rootView.setBackgroundColor(color)
+        val textView = rootView.findViewById<TextView>(R.id.cell_text)
+        val currentPrice = textView.text.toString().toDoubleOrNull() ?: 0.0
+        textView.text = (currentPrice / 2).toString()
     }
+
 
 
 }
